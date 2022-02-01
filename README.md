@@ -13,7 +13,7 @@
 
 ### Installation
 ```bash
-npm install react-native-side-menu --save
+npm install @mtourj/react-native-side-menu --save
 ```
 
 ### Usage example
