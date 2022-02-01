@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:react-native-community/react-native-side-menu.git"
+    "url": "git@github.com:mtourj/react-native-side-menu.git"
   },
   "keywords": [
     "react-native",
@@ -17,12 +17,12 @@
     "ios",
     "sidebar"
   ],
-  "author": "Alexey Kureev <kureev-mail@ya.ru> (https://github.com/Kureev)",
+  "author": "Mohammad Tourjoman <mohammad@godwitkey.com> (https://github.com/mtourj)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/react-native-community/react-native-side-menu/issues"
+    "url": "https://github.com/mtourj/react-native-side-menu/issues"
   },
-  "homepage": "https://github.com/react-native-community/react-native-side-menu",
+  "homepage": "https://github.com/mtourj/react-native-side-menu",
   "dependencies": {
     "prop-types": "^15.5.10"
   },
