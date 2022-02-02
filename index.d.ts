@@ -1,8 +1,9 @@
 import React, { ReactElement } from "react";
-import { Animated } from "react-native";
+import { Animated, ViewStyle } from "react-native";
 
 type Props = {
   menu: ReactElement;
+  style?: ViewStyle;
   edgeHitWidth?: number;
   toleranceX?: number;
   toleranceY?: number;
