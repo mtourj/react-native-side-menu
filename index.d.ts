@@ -13,13 +13,13 @@ type Props = {
   onSliding?: Function;
   openMenuOffset?: number;
   hiddenMenuOffset?: number;
-  disableGestures?: Function | bool;
+  disableGestures?: Function | boolean;
   animationFunction?: Function;
   onAnimationComplete?: Function;
   onStartShouldSetResponderCapture?: Function;
-  isOpen?: bool;
-  bounceBackOnOverdraw?: bool;
-  autoClosing?: bool;
+  isOpen?: boolean;
+  bounceBackOnOverdraw?: boolean;
+  autoClosing?: boolean;
 };
 
 type State = {

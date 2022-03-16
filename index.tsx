@@ -1,5 +1,8 @@
-// @flow
+/**
+ * Fork of archived package https://github.com/Kureev/react-native-side-menu
+ */
 
+// @flow
 import React from "react";
 import {
   PanResponder,
@@ -11,44 +14,44 @@ import {
 import PropTypes from "prop-types";
 import styles from "./styles";
 
-type WindowDimensions = { width: number, height: number };
+type WindowDimensions = { width: number; height: number };
 
 type Props = {
-  edgeHitWidth: number,
-  toleranceX: number,
-  toleranceY: number,
-  menuPosition: "left" | "right",
-  onChange: Function,
-  onMove: Function,
-  onSliding: Function,
-  openMenuOffset: number,
-  hiddenMenuOffset: number,
-  disableGestures: Function | boolean,
-  animationFunction: Function,
-  onAnimationComplete: Function,
-  onStartShouldSetResponderCapture: Function,
-  isOpen: boolean,
-  bounceBackOnOverdraw: boolean,
-  autoClosing: boolean,
+  edgeHitWidth: number;
+  toleranceX: number;
+  toleranceY: number;
+  menuPosition: "left" | "right";
+  onChange: Function;
+  onMove: Function;
+  onSliding: Function;
+  openMenuOffset: number;
+  hiddenMenuOffset: number;
+  disableGestures: Function | boolean;
+  animationFunction: Function;
+  onAnimationComplete: Function;
+  onStartShouldSetResponderCapture: Function;
+  isOpen: boolean;
+  bounceBackOnOverdraw: boolean;
+  autoClosing: boolean;
 };
 
 type Event = {
   nativeEvent: {
     layout: {
-      width: number,
-      height: number,
-    },
-  },
+      width: number;
+      height: number;
+    };
+  };
 };
 
 type State = {
-  width: number,
-  height: number,
-  openOffsetMenuPercentage: number,
-  openMenuOffset: number,
-  hiddenMenuOffsetPercentage: number,
-  hiddenMenuOffset: number,
-  left: Animated.Value,
+  width: number;
+  height: number;
+  openOffsetMenuPercentage: number;
+  openMenuOffset: number;
+  hiddenMenuOffsetPercentage: number;
+  hiddenMenuOffset: number;
+  left: Animated.Value;
 };
 
 const deviceScreen: WindowDimensions = Dimensions.get("window");
@@ -59,7 +62,6 @@ function shouldOpenMenu(dx: number): boolean {
 }
 
 export default class SideMenu extends React.Component {
-  onLayoutChange: Function;
   onStartShouldSetResponderCapture: Function;
   onMoveShouldSetPanResponder: Function;
   onPanResponderMove: Function;
@@ -152,7 +154,7 @@ export default class SideMenu extends React.Component {
     if (this.isOpen) {
       overlay = (
         <TouchableWithoutFeedback onPress={() => this.openMenu(false)}>
-          <View style={styles.overlay} />
+          <View style={[styles.overlay, this.props.overlayStyle]} />
         </TouchableWithoutFeedback>
       );
     }
