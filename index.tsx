@@ -219,7 +219,14 @@ export default class SideMenu extends React.Component<
   }
 
   moveLeft(offset: number) {
-    const newOffset = this.menuPositionMultiplier() * offset;
+    let newOffset = this.menuPositionMultiplier() * offset;
+
+    if (
+      this.props.maxOpenMenuOffset &&
+      newOffset > this.props.maxOpenMenuOffset
+    ) {
+      newOffset = this.props.maxOpenMenuOffset;
+    }
 
     this.props
       .animationFunction(this.state.left, newOffset)

@@ -17,6 +17,8 @@ interface Props {
   onChange?: (isOpen: boolean) => void;
   onMove?: (left: number) => void;
   onSliding?: (position: number) => void;
+  /** If set, menu will never be larger than this number */
+  maxOpenMenuOffset?: number;
   openMenuOffset?: number;
   /** If set, openMenuOffset is ignored */
   openMenuOffsetPercentage?: number;
