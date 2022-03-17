@@ -101,11 +101,10 @@ class SideMenu extends react_1.default.Component {
      */
     getContentView() {
         var _a, _b;
-        let overlay = <></>;
+        let overlay = react_1.default.createElement(react_1.default.Fragment, null);
         if (this.isOpen) {
-            overlay = (<react_native_1.TouchableWithoutFeedback onPress={() => this.openMenu(false)}>
-          <react_native_1.View style={[styles_1.default.overlay, this.props.overlayStyle]}/>
-        </react_native_1.TouchableWithoutFeedback>);
+            overlay = (react_1.default.createElement(react_native_1.TouchableWithoutFeedback, { onPress: () => this.openMenu(false) },
+                react_1.default.createElement(react_native_1.View, { style: [styles_1.default.overlay, this.props.overlayStyle] })));
         }
         const { width, height } = this.state;
         const style = [
@@ -113,10 +112,9 @@ class SideMenu extends react_1.default.Component {
             { width, height },
             (_b = (_a = this.props).animatedContainerStyle) === null || _b === void 0 ? void 0 : _b.call(_a, this.state.left),
         ];
-        return (<react_native_1.Animated.View style={style} {...this.responder.panHandlers}>
-        {this.props.children}
-        {overlay}
-      </react_native_1.Animated.View>);
+        return (react_1.default.createElement(react_native_1.Animated.View, Object.assign({ style: style }, this.responder.panHandlers),
+            this.props.children,
+            overlay));
     }
     moveLeft(offset) {
         const newOffset = this.menuPositionMultiplier() * offset;
@@ -188,13 +186,10 @@ class SideMenu extends react_1.default.Component {
                 display: "none",
             }
             : null;
-        const menu = (<react_native_1.View style={[styles_1.default.menu, boundryStyle, this.props.style, clipMenuIfClosed]}>
-        {this.props.menu}
-      </react_native_1.View>);
-        return (<react_native_1.View style={styles_1.default.container} onLayout={this.onLayoutChange}>
-        {menu}
-        {this.getContentView()}
-      </react_native_1.View>);
+        const menu = (react_1.default.createElement(react_native_1.View, { style: [styles_1.default.menu, boundryStyle, this.props.style, clipMenuIfClosed] }, this.props.menu));
+        return (react_1.default.createElement(react_native_1.View, { style: styles_1.default.container, onLayout: this.onLayoutChange },
+            menu,
+            this.getContentView()));
     }
 }
 exports.default = SideMenu;

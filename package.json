@@ -1,6 +1,6 @@
 {
   "name": "@mtourj/react-native-side-menu",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Simple customizable component to create side menu",
   "main": "build/index.js",
   "types": "index.d.ts",
