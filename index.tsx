@@ -105,6 +105,14 @@ export default class SideMenu extends React.Component<
     const openOffsetMenuPercentage =
       this.props.openMenuOffsetPercentage ??
       props.openMenuOffset / deviceScreen.width;
+    let openMenuOffset = deviceScreen.width * openOffsetMenuPercentage;
+    if (
+      this.props.maxOpenMenuOffset &&
+      openMenuOffset > this.props.maxOpenMenuOffset
+    ) {
+      openMenuOffset = this.props.maxOpenMenuOffset;
+    }
+
     const hiddenMenuOffsetPercentage =
       props.hiddenMenuOffset / deviceScreen.width;
     const left: Animated.Value = new Animated.Value(
@@ -124,7 +132,7 @@ export default class SideMenu extends React.Component<
       width: deviceScreen.width,
       height: deviceScreen.height,
       openOffsetMenuPercentage: openOffsetMenuPercentage,
-      openMenuOffset: deviceScreen.width * openOffsetMenuPercentage,
+      openMenuOffset,
       hiddenMenuOffsetPercentage,
       hiddenMenuOffset: deviceScreen.width * hiddenMenuOffsetPercentage,
       left,
@@ -159,8 +167,14 @@ export default class SideMenu extends React.Component<
 
   onLayoutChange(e: Event) {
     const { width, height } = e.nativeEvent.layout;
-    const openMenuOffset = width * this.state.openOffsetMenuPercentage;
     const hiddenMenuOffset = width * this.state.hiddenMenuOffsetPercentage;
+    let openMenuOffset = width * this.state.openOffsetMenuPercentage;
+    if (
+      this.props.maxOpenMenuOffset &&
+      openMenuOffset > this.props.maxOpenMenuOffset
+    ) {
+      openMenuOffset = this.props.maxOpenMenuOffset;
+    }
     this.setState({ width, height, openMenuOffset, hiddenMenuOffset });
   }
 
@@ -219,14 +233,7 @@ export default class SideMenu extends React.Component<
   }
 
   moveLeft(offset: number) {
-    let newOffset = this.menuPositionMultiplier() * offset;
-
-    if (
-      this.props.maxOpenMenuOffset &&
-      newOffset > this.props.maxOpenMenuOffset
-    ) {
-      newOffset = this.props.maxOpenMenuOffset;
-    }
+    const newOffset = this.menuPositionMultiplier() * offset;
 
     this.props
       .animationFunction(this.state.left, newOffset)

@@ -50,6 +50,11 @@ class SideMenu extends react_1.default.Component {
         this.isOpen = !!props.isOpen;
         const initialMenuPositionMultiplier = props.menuPosition === "right" ? -1 : 1;
         const openOffsetMenuPercentage = (_a = this.props.openMenuOffsetPercentage) !== null && _a !== void 0 ? _a : props.openMenuOffset / deviceScreen.width;
+        let openMenuOffset = deviceScreen.width * openOffsetMenuPercentage;
+        if (this.props.maxOpenMenuOffset &&
+            openMenuOffset > this.props.maxOpenMenuOffset) {
+            openMenuOffset = this.props.maxOpenMenuOffset;
+        }
         const hiddenMenuOffsetPercentage = props.hiddenMenuOffset / deviceScreen.width;
         const left = new react_native_1.Animated.Value(props.isOpen
             ? props.openMenuOffset * initialMenuPositionMultiplier
@@ -64,7 +69,7 @@ class SideMenu extends react_1.default.Component {
             width: deviceScreen.width,
             height: deviceScreen.height,
             openOffsetMenuPercentage: openOffsetMenuPercentage,
-            openMenuOffset: deviceScreen.width * openOffsetMenuPercentage,
+            openMenuOffset,
             hiddenMenuOffsetPercentage,
             hiddenMenuOffset: deviceScreen.width * hiddenMenuOffsetPercentage,
             left,
@@ -87,8 +92,12 @@ class SideMenu extends react_1.default.Component {
     }
     onLayoutChange(e) {
         const { width, height } = e.nativeEvent.layout;
-        const openMenuOffset = width * this.state.openOffsetMenuPercentage;
         const hiddenMenuOffset = width * this.state.hiddenMenuOffsetPercentage;
+        let openMenuOffset = width * this.state.openOffsetMenuPercentage;
+        if (this.props.maxOpenMenuOffset &&
+            openMenuOffset > this.props.maxOpenMenuOffset) {
+            openMenuOffset = this.props.maxOpenMenuOffset;
+        }
         this.setState({ width, height, openMenuOffset, hiddenMenuOffset });
     }
     /** Maps sliding to animation to value betwen 0 and 1 */
@@ -131,11 +140,7 @@ class SideMenu extends react_1.default.Component {
             overlay));
     }
     moveLeft(offset) {
-        let newOffset = this.menuPositionMultiplier() * offset;
-        if (this.props.maxOpenMenuOffset &&
-            newOffset > this.props.maxOpenMenuOffset) {
-            newOffset = this.props.maxOpenMenuOffset;
-        }
+        const newOffset = this.menuPositionMultiplier() * offset;
         this.props
             .animationFunction(this.state.left, newOffset)
             .start(this.props.onAnimationComplete);
