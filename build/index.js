@@ -23,7 +23,6 @@ const defaultProps = {
     menuPosition: "left",
     hiddenMenuOffset: 0,
     onMove: () => { },
-    onStartShouldSetResponderCapture: () => true,
     onChange: () => { },
     onSliding: () => { },
     animatedContainerStyle: (value) => ({
@@ -56,8 +55,6 @@ class SideMenu extends react_1.default.Component {
             ? props.openMenuOffset * initialMenuPositionMultiplier
             : props.hiddenMenuOffset);
         this.onLayoutChange = this.onLayoutChange.bind(this);
-        this.onStartShouldSetResponderCapture =
-            props.onStartShouldSetResponderCapture.bind(this);
         this.onMoveShouldSetPanResponder =
             this.handleMoveShouldSetPanResponder.bind(this);
         this.onPanResponderMove = this.handlePanResponderMove.bind(this);
@@ -75,7 +72,6 @@ class SideMenu extends react_1.default.Component {
         this.state.left.addListener(({ value }) => this.props.onSliding(Math.abs((value - this.state.hiddenMenuOffset) /
             (this.state.openMenuOffset - this.state.hiddenMenuOffset))));
         this.responder = react_native_1.PanResponder.create({
-            onStartShouldSetPanResponderCapture: this.onStartShouldSetResponderCapture,
             onMoveShouldSetPanResponder: this.onMoveShouldSetPanResponder,
             onPanResponderMove: this.onPanResponderMove,
             onPanResponderRelease: this.onPanResponderRelease,
@@ -95,16 +91,34 @@ class SideMenu extends react_1.default.Component {
         const hiddenMenuOffset = width * this.state.hiddenMenuOffsetPercentage;
         this.setState({ width, height, openMenuOffset, hiddenMenuOffset });
     }
+    /** Maps sliding to animation to value betwen 0 and 1 */
+    mapSlidingAnimationToPercentage() {
+        let { hiddenMenuOffset, openMenuOffset } = this.state;
+        const mult = this.menuPositionMultiplier();
+        const smaller = Math.min(hiddenMenuOffset * mult, openMenuOffset * mult);
+        const bigger = Math.max(hiddenMenuOffset * mult, openMenuOffset * mult);
+        let outputRange = [0, 1, 1];
+        if (mult === -1)
+            outputRange.reverse();
+        return this.state.left.interpolate({
+            inputRange: [smaller, (smaller + bigger) / 3, bigger],
+            outputRange,
+        });
+    }
     /**
      * Get content view. This view will be rendered over menu
      * @return {React.Component}
      */
     getContentView() {
         var _a, _b;
-        let overlay = react_1.default.createElement(react_1.default.Fragment, null);
+        let overlay = null;
         if (this.isOpen) {
+            const overlayOpacityStyle = {
+                opacity: this.mapSlidingAnimationToPercentage(),
+            };
             overlay = (react_1.default.createElement(react_native_1.TouchableWithoutFeedback, { onPress: () => this.openMenu(false) },
-                react_1.default.createElement(react_native_1.View, { style: [styles_1.default.overlay, this.props.overlayStyle] })));
+                react_1.default.createElement(react_native_1.Animated.View, { style: [styles_1.default.overlay, overlayOpacityStyle] },
+                    react_1.default.createElement(react_native_1.View, { style: [styles_1.default.overlay, this.props.overlayStyle] }))));
         }
         const { width, height } = this.state;
         const style = [
@@ -179,14 +193,10 @@ class SideMenu extends react_1.default.Component {
         const boundryStyle = this.props.menuPosition === "right"
             ? { left: this.state.width - this.state.openMenuOffset }
             : { right: this.state.width - this.state.openMenuOffset };
-        const clipMenuIfClosed = 
-        // @ts-ignore -- Member __getValue() is untyped
-        this.state.left.__getValue() === 0
-            ? {
-                display: "none",
-            }
-            : null;
-        const menu = (react_1.default.createElement(react_native_1.View, { style: [styles_1.default.menu, boundryStyle, this.props.style, clipMenuIfClosed] }, this.props.menu));
+        const menuOpacityStyle = {
+            opacity: this.mapSlidingAnimationToPercentage(),
+        };
+        const menu = (react_1.default.createElement(react_native_1.Animated.View, { style: [styles_1.default.menu, boundryStyle, this.props.style, menuOpacityStyle] }, this.props.menu));
         return (react_1.default.createElement(react_native_1.View, { style: styles_1.default.container, onLayout: this.onLayoutChange },
             menu,
             this.getContentView()));
