@@ -45,7 +45,6 @@ const defaultProps = {
   menuPosition: "left",
   hiddenMenuOffset: 0,
   onMove: () => {},
-  onStartShouldSetResponderCapture: () => true,
   onChange: () => {},
   onSliding: () => {},
   animatedContainerStyle: (value: Animated.Value) =>
@@ -72,10 +71,6 @@ export default class SideMenu extends React.Component<
   Props & typeof defaultProps,
   State
 > {
-  onStartShouldSetResponderCapture: (
-    e: GestureResponderEvent,
-    gestureState: PanResponderGestureState
-  ) => boolean;
   onMoveShouldSetPanResponder: (
     e: GestureResponderEvent,
     gestureState: PanResponderGestureState
@@ -119,8 +114,6 @@ export default class SideMenu extends React.Component<
     );
 
     this.onLayoutChange = this.onLayoutChange.bind(this);
-    this.onStartShouldSetResponderCapture =
-      props.onStartShouldSetResponderCapture.bind(this);
     this.onMoveShouldSetPanResponder =
       this.handleMoveShouldSetPanResponder.bind(this);
     this.onPanResponderMove = this.handlePanResponderMove.bind(this);
@@ -147,8 +140,6 @@ export default class SideMenu extends React.Component<
     );
 
     this.responder = PanResponder.create({
-      onStartShouldSetPanResponderCapture:
-        this.onStartShouldSetResponderCapture,
       onMoveShouldSetPanResponder: this.onMoveShouldSetPanResponder,
       onPanResponderMove: this.onPanResponderMove,
       onPanResponderRelease: this.onPanResponderRelease,
@@ -173,17 +164,41 @@ export default class SideMenu extends React.Component<
     this.setState({ width, height, openMenuOffset, hiddenMenuOffset });
   }
 
+  /** Maps sliding to animation to value betwen 0 and 1 */
+  mapSlidingAnimationToPercentage() {
+    let { hiddenMenuOffset, openMenuOffset } = this.state;
+
+    const mult = this.menuPositionMultiplier();
+    const smaller = Math.min(hiddenMenuOffset * mult, openMenuOffset * mult);
+    const bigger = Math.max(hiddenMenuOffset * mult, openMenuOffset * mult);
+
+    let outputRange = [0, 1, 1];
+
+    if (mult === -1) outputRange.reverse();
+
+    return this.state.left.interpolate({
+      inputRange: [smaller, (smaller + bigger) / 3, bigger],
+      outputRange,
+    });
+  }
+
   /**
    * Get content view. This view will be rendered over menu
    * @return {React.Component}
    */
   getContentView() {
-    let overlay: React.ReactElement = <></>;
+    let overlay: React.ReactElement | null = null;
 
     if (this.isOpen) {
+      const overlayOpacityStyle = {
+        opacity: this.mapSlidingAnimationToPercentage(),
+      };
+
       overlay = (
         <TouchableWithoutFeedback onPress={() => this.openMenu(false)}>
-          <View style={[styles.overlay, this.props.overlayStyle]} />
+          <Animated.View style={[styles.overlay, overlayOpacityStyle]}>
+            <View style={[styles.overlay, this.props.overlayStyle]} />
+          </Animated.View>
         </TouchableWithoutFeedback>
       );
     }
@@ -298,20 +313,16 @@ export default class SideMenu extends React.Component<
         ? { left: this.state.width - this.state.openMenuOffset }
         : { right: this.state.width - this.state.openMenuOffset };
 
-    const clipMenuIfClosed =
-      // @ts-ignore -- Member __getValue() is untyped
-      this.state.left.__getValue() === 0
-        ? {
-            display: "none" as "none",
-          }
-        : null;
+    const menuOpacityStyle = {
+      opacity: this.mapSlidingAnimationToPercentage(),
+    };
 
     const menu = (
-      <View
-        style={[styles.menu, boundryStyle, this.props.style, clipMenuIfClosed]}
+      <Animated.View
+        style={[styles.menu, boundryStyle, this.props.style, menuOpacityStyle]}
       >
         {this.props.menu}
-      </View>
+      </Animated.View>
     );
 
     return (

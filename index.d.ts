@@ -24,7 +24,6 @@ interface Props {
   disableGestures?: (() => boolean) | boolean;
   animationFunction?: Function;
   onAnimationComplete?: Function;
-  onStartShouldSetResponderCapture?: Function;
   isOpen?: boolean;
   bounceBackOnOverdraw?: boolean;
   autoClosing?: boolean;
