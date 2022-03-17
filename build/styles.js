@@ -1,2 +1,32 @@
-Object.defineProperty(exports,"__esModule",{value:true});var _extends=Object.assign||function(target){for(var i=1;i<arguments.length;i++){var source=arguments[i];for(var key in source){if(Object.prototype.hasOwnProperty.call(source,key)){target[key]=source[key];}}}return target;};var _reactNative=require("react-native");exports.default=_reactNative.StyleSheet.create({container:{flex:1,justifyContent:"center"},menu:_extends({},_reactNative.StyleSheet.absoluteFill),frontView:{flex:1,position:"absolute",left:0,top:0,backgroundColor:"transparent",overflow:"hidden"},overlay:_extends({},_reactNative.StyleSheet.absoluteFill,{backgroundColor:"transparent"})});
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const react_native_1 = require("react-native");
+/** For some reason, using StyleSheet.absoluteFill does
+ * not work, so we just make our own.
+ */
+const absoluteFill = {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    left: 0,
+    bottom: 0,
+};
+exports.default = react_native_1.StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: "center",
+    },
+    menu: { ...absoluteFill },
+    frontView: {
+        flex: 1,
+        position: "absolute",
+        left: 0,
+        top: 0,
+        backgroundColor: "transparent",
+        overflow: "hidden",
+    },
+    overlay: {
+        ...absoluteFill,
+        backgroundColor: "transparent",
+    },
+});

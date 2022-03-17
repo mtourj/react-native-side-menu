@@ -1,21 +1,28 @@
 {
-  "parser": "babel-eslint",
-  "extends": "airbnb",
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
   "rules": {
     "no-underscore-dangle": "off",
 
-    "import/no-extraneous-dependencies": ["error", {"devDependencies": true, "optionalDependencies": false}],
+    "import/no-extraneous-dependencies": [
+      "error",
+      { "devDependencies": true, "optionalDependencies": false }
+    ],
     "import/no-unresolved": 0,
 
-    "react/jsx-filename-extension": [1, { "extensions": [".js"] }],
-    "react/sort-comp": [1, {
-      "order": [
-        "type-annotations",
-        "static-methods",
-        "lifecycle",
-        "everything-else",
-        "render"
-      ]
-    }]
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".tsx"] }],
+    "react/sort-comp": [
+      1,
+      {
+        "order": [
+          "type-annotations",
+          "static-methods",
+          "lifecycle",
+          "everything-else",
+          "render"
+        ]
+      }
+    ]
   }
 }
