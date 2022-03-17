@@ -16,7 +16,7 @@ exports.default = react_native_1.StyleSheet.create({
         flex: 1,
         justifyContent: "center",
     },
-    menu: { ...absoluteFill },
+    menu: Object.assign({}, absoluteFill),
     frontView: {
         flex: 1,
         position: "absolute",
@@ -25,8 +25,5 @@ exports.default = react_native_1.StyleSheet.create({
         backgroundColor: "transparent",
         overflow: "hidden",
     },
-    overlay: {
-        ...absoluteFill,
-        backgroundColor: "transparent",
-    },
+    overlay: Object.assign(Object.assign({}, absoluteFill), { backgroundColor: "transparent" }),
 });

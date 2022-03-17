@@ -44,23 +44,13 @@ const defaultProps = {
     autoClosing: true,
 };
 class SideMenu extends react_1.default.Component {
-    onStartShouldSetResponderCapture;
-    onMoveShouldSetPanResponder;
-    onPanResponderMove;
-    onPanResponderRelease;
-    onPanResponderTerminate;
-    state;
-    prevLeft;
-    isOpen;
-    responder;
-    static defaultProps = defaultProps;
     constructor(props) {
+        var _a;
         super(props);
         this.prevLeft = 0;
         this.isOpen = !!props.isOpen;
         const initialMenuPositionMultiplier = props.menuPosition === "right" ? -1 : 1;
-        const openOffsetMenuPercentage = this.props.openMenuOffsetPercentage ??
-            props.openMenuOffset / deviceScreen.width;
+        const openOffsetMenuPercentage = (_a = this.props.openMenuOffsetPercentage) !== null && _a !== void 0 ? _a : props.openMenuOffset / deviceScreen.width;
         const hiddenMenuOffsetPercentage = props.hiddenMenuOffset / deviceScreen.width;
         const left = new react_native_1.Animated.Value(props.isOpen
             ? props.openMenuOffset * initialMenuPositionMultiplier
@@ -110,6 +100,7 @@ class SideMenu extends react_1.default.Component {
      * @return {React.Component}
      */
     getContentView() {
+        var _a, _b;
         let overlay = <></>;
         if (this.isOpen) {
             overlay = (<react_native_1.TouchableWithoutFeedback onPress={() => this.openMenu(false)}>
@@ -120,7 +111,7 @@ class SideMenu extends react_1.default.Component {
         const style = [
             styles_1.default.frontView,
             { width, height },
-            this.props.animatedContainerStyle?.(this.state.left),
+            (_b = (_a = this.props).animatedContainerStyle) === null || _b === void 0 ? void 0 : _b.call(_a, this.state.left),
         ];
         return (<react_native_1.Animated.View style={style} {...this.responder.panHandlers}>
         {this.props.children}
@@ -207,3 +198,4 @@ class SideMenu extends react_1.default.Component {
     }
 }
 exports.default = SideMenu;
+SideMenu.defaultProps = defaultProps;
