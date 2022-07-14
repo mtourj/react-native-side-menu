@@ -13,6 +13,7 @@ import {
   GestureResponderEvent,
   PanResponderGestureState,
   ViewStyle,
+  StyleSheet,
 } from "react-native";
 import styles from "./styles";
 
@@ -221,7 +222,9 @@ export default class SideMenu extends React.Component<
     const style = [
       styles.frontView,
       { width, height },
-      this.props.animatedContainerStyle?.(this.state.left),
+      StyleSheet.flatten(
+        this.props.animatedContainerStyle?.(this.state.left) as any
+      ),
     ];
 
     return (

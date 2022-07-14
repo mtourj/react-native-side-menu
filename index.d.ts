@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { Animated, ViewStyle } from "react-native";
+import { Animated, StyleProp, ViewStyle } from "react-native";
 
 type MenuPosition = "left" | "right";
 
@@ -8,7 +8,9 @@ interface Props {
   /** Style for View that wraps the menu component */
   style?: ViewStyle;
   /** Style for Animated View that wraps children. Receives animated value for sliding animation. */
-  animatedContainerStyle?: (left: Animated.Value) => ViewStyle;
+  animatedContainerStyle?: (
+    translateX: Animated.Value
+  ) => Animated.AnimatedProps<StyleProp<ViewStyle>>;
   overlayStyle?: ViewStyle;
   edgeHitWidth?: number;
   toleranceX?: number;
