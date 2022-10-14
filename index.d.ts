@@ -43,4 +43,7 @@ interface State {
   left: Animated.Value;
 }
 
-export default class SideMenu extends React.Component<Props, State> {}
+export default class SideMenu extends React.Component<
+  React.PropsWithChildren<Props>,
+  State
+> {}
